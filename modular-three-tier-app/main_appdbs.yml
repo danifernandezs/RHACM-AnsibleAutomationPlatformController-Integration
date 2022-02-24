@@ -1,0 +1,21 @@
+---
+
+- name: Play to setup mysql server
+  hosts: database_servers
+  tasks:
+    - debug:
+        msg: "Start Mysql server setup"
+
+    - name: Setup firewall
+      include_role:
+        name: firewall
+      vars:
+        firewall_services:
+          - mysql
+
+    - name: Setup mysql server
+      include_role:
+        name: mysql-server
+
+    - debug:
+        msg: "Finished Mysql server setup"

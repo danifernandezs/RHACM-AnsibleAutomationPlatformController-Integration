@@ -1,0 +1,17 @@
+---
+
+apache_packages: 
+  - httpd
+  - php
+  - php-mysqlnd
+  # - php-mysql
+
+apache_services: 
+  - httpd
+
+mysql_info:
+  user: devops
+  database: userdb
+  password: redhat
+
+...
