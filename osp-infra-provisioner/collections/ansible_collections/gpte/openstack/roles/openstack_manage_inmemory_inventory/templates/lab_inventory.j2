@@ -1,0 +1,8 @@
+{%  for item in AnsibleGroup | sort if item != "bastions,control" %}
+
+[{{item}}]
+{%   for entry in groups[item] | sort if entry != "control" %}
+{{ entry }}  
+{%   endfor %}
+{% endfor %}
+

@@ -1,0 +1,42 @@
+openstack_security_groups: []
+openstack_server_state: present
+openstack_cloud: "{{GUID}}-project"
+
+openstack_servers:
+
+  - instance_name: web1
+    AnsibleGroup: backend_servers
+    deployment: prod
+    security_group_name: "{{GUID}}-HostSG"
+    image: "{{ _server_image | default('rhel-8.3') }}"
+    openstack_cloud: "{{GUID}}-project"
+    flavor: GLOBAL-CPU_4_Memory_32768_Disk_60_flavor
+    key_name: "{{GUID}}-keypair"
+    network: "{{GUID}}-prod-network"
+  - instance_name: web2
+    AnsibleGroup: backend_servers
+    deployment: prod
+    security_group_name: "{{GUID}}-HostSG"
+    image: "{{ _server_image | default('rhel-8.3') }}"
+    openstack_cloud: "{{GUID}}-project"
+    flavor: GLOBAL-CPU_4_Memory_32768_Disk_60_flavor
+    key_name: "{{GUID}}-keypair"
+    network: "{{GUID}}-prod-network"
+  - instance_name: db
+    AnsibleGroup: database_servers
+    deployment: prod
+    security_group_name: "{{GUID}}-HostSG"
+    image: "{{ _server_image | default('rhel-8.3') }}"
+    openstack_cloud: "{{GUID}}-project"
+    flavor: GLOBAL-CPU_4_Memory_32768_Disk_60_flavor
+    key_name: "{{GUID}}-keypair"
+    network: "{{GUID}}-prod-network"
+  - instance_name: lb
+    AnsibleGroup: load_balancers
+    deployment: prod
+    security_group_name: "{{GUID}}-HostSG"
+    image: "{{ _server_image | default('rhel-8.3') }}"
+    openstack_cloud: "{{GUID}}-project"
+    flavor: GLOBAL-CPU_4_Memory_32768_Disk_60_flavor
+    key_name: "{{GUID}}-keypair"
+    network: "{{GUID}}-prod-network"

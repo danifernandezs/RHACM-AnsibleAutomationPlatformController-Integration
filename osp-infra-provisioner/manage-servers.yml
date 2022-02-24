@@ -1,0 +1,13 @@
+---
+- name: Manage OpenStack Servers
+  hosts: control_node
+  gather_facts: false
+  become: false
+  collections:
+    - gpte.openstack
+
+  roles:
+
+    - openstack_manage_servers
+
+...
