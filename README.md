@@ -1,40 +1,82 @@
-## Welcome to GitHub Pages
+# OCP+ACM meets Ansible Automation Platform
 
-You can use the [editor on GitHub](https://github.com/danifernandezs/RHACM-AnsibleAutomationPlatformController-Integration/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+Here we go to see the way to talk from an OpenShift cluster with an Ansible Automation Platform Controller (aka Ansible Tower)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Prerequisites
+- Red Hat OpenShift Container Platform 4.5 or later
+- You must have Ansible Tower version 3.7.3 or a later version installed. It is best practice to install the latest supported version of Ansible Tower. See Red Hat Ansible Tower documentation for more details.
+- Install the Ansible Automation Platform Resource Operator on to your hub cluster to connect Ansible jobs to the governance framework. For best results when using the AnsibleJob to launch Ansible Tower jobs, the Ansible Tower job template should be idempotent when it is run. If you do not have Ansible Automation Platform Resource Operator, you can find it from the Red Hat OpenShift Container Platform OperatorHub page.
 
-### Markdown
+# Ansible Tower
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Only for demo purposes we are going to use the AAP Course, available at the [Red Hat University](https://start.learning.redhat.com/totara/3747
+)
 
-```markdown
-Syntax highlighted code block
+Step by step, [here.](AnsibleTowerInstance.md)
 
-# Header 1
-## Header 2
-### Header 3
+# Integrate the OCP Cluster with Ansible Tower
 
-- Bulleted
-- List
+Time to deploy the Ansible Automation Platform Resource Operator, cluster scoped
 
-1. Numbered
-2. List
+- Namespace where deploy the Operator
+````bash
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ansible-automation-platform
+  labels:
+    operators.coreos.com/ansible-automation-platform-operator.ansible-automation-platfor: ''
+````
+- Subscription to the Operator Channel
+````bash
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    operators.coreos.com/ansible-automation-platform-operator.ansible-automation-platfor: ''
+  name: ansible-automation-platform-operator
+  namespace: ansible-automation-platform
+spec:
+  channel: stable-2.1-cluster-scoped
+  installPlanApproval: Manual
+  name: ansible-automation-platform-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: aap-operator.v2.1.1-0.1645503271
+````
+- Operator Group
+````bash
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  annotations:
+    olm.providedAPIs: >-
+      AnsibleJob.v1alpha1.tower.ansible.com,AutomationController.v1beta1.automationcontroller.ansible.com,AutomationControllerBackup.v1beta1.automationcontroller.ansible.com,AutomationControllerRestore.v1beta1.automationcontroller.ansible.com,AutomationHub.v1beta1.automationhub.ansible.com,AutomationHubBackup.v1beta1.automationhub.ansible.com,AutomationHubRestore.v1beta1.automationhub.ansible.com,JobTemplate.v1alpha1.tower.ansible.com
+  name: ansible-automation-platform
+  namespace: ansible-automation-platform
+spec: {}
+````
+- Obtain and approve the Install Plan
+````bash
+oc patch installplan "$(oc get installplan -n ansible-automation-platform -o 'jsonpath={..metadata.name}')" \
+    -n ansible-automation-platform \
+    --type merge \
+    --patch '{"spec":{"approved":true}}'
+````
 
-**Bold** and _Italic_ and `Code` text
+# Default integration
 
-[Link](url) and ![Image](src)
-```
+All the integration needs use an OpenShift secret, this secret contains the Ansible Tower API url and the token to be used.
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+This secret is needed in all namespaces that going to be execute a remote Ansible Job Template.
 
-### Jekyll Themes
+# References
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/danifernandezs/RHACM-AnsibleAutomationPlatformController-Integration/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+- https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/governance/governance#configuring-governance-ansible
+- https://start.learning.redhat.com/totara/3747
 
 ## License
 
