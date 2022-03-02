@@ -10,14 +10,7 @@
 [laptop]$ ssh <OPENTLC-USER-ID>@control.${GUID}.${SUBDOMAIN}
 ````
 ````bash
-[user@control ~]$ sudo su - devops
-````
-
-## Prepare Lab Nodes
-````bash
-lab deploy satellite
-lab deploy gitlab
-lab deploy tower
+[user@control ~]$ sudo su
 ````
 
 ## Install Red Hat Ansible Tower cluster
@@ -27,33 +20,37 @@ All releases
 https://releases.ansible.com/ansible-tower/setup/
 
 ````bash
-ansible localhost -m unarchive -a "src=https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-3.8.4-1.tar.gz dest=/home/devops remote_src=yes"
+mkdir /home/tower
+ansible localhost -m unarchive -a "src=https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-3.8.4-1.tar.gz dest=/home/tower remote_src=yes"
 ````
 ````bash
+cd /home/tower
 cd ansible-tower-setup-3.8.4-1
 
 cat > inventory <<EOF
 [tower]
-tower1.example.com
-tower2.example.com
-tower3.example.com
+localhost ansible_connection=local
+
+[automationhub]
 
 [database]
-towerdb.example.com
 
 [all:vars]
 admin_password='redhat'
-ansible_become=true
-pg_host='towerdb.example.com'
-pg_port='5432'
+
+pg_host=''
+pg_port=''
+
 pg_database='awx'
 pg_username='awx'
 pg_password='redhat'
-pg_sslmode='prefer'
-nginx_disable_https=true
+pg_sslmode='prefer'  # set to 'verify-full' for client-side enforced SSL
 
 EOF
 ````
 ````bash
 ./setup.sh
 ````
+
+## Ansible Tower Subscription
+You will need a valid subscription to use the AAP stack
