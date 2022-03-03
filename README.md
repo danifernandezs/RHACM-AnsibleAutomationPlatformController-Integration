@@ -113,6 +113,9 @@ spec:
   policyRef: namespace-must-exist
 
 ````
+![](img/PolicyAutomation01.png)
+![](img/PolicyAutomation02.png)
+
 
 
 # References
