@@ -2,7 +2,7 @@
 
 ## Provision Lab Environment
 - Navigate to the OPENTLC lab portal and login using your OPENTLC credentials.
-- Navigate to Services → Catalogs → All Services → OPENTLC Automation.
+- Navigate to Services → Catalogs → All Services → OPENTLC Automation. → Ansible Advanced - Lab
 
 ## Connect to the control node
 
