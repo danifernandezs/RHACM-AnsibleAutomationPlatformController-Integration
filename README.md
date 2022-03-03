@@ -116,6 +116,48 @@ spec:
 ![](img/PolicyAutomation01.png)
 ![](img/PolicyAutomation02.png)
 
+# ACM Automation Template
+
+````bash
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: ClusterCurator
+metadata:
+  name: aws-template
+  namespace: hive
+spec:
+  destroy:
+    posthook: []
+    prehook: []
+    towerAuthSecret: acm-hive
+  install:
+    posthook:
+      - extra_vars:
+          hook_type: post
+        name: Cluster Creation - tasks
+    prehook:
+      - extra_vars:
+          hook_type: pre
+        name: Cluster Creation - tasks
+    towerAuthSecret: acm-hive
+  scale:
+    posthook: []
+    prehook: []
+    towerAuthSecret: acm-hive
+  upgrade:
+    posthook:
+      - extra_vars:
+          hook_type: post
+        name: Cluster Upgrade - tasks
+    prehook:
+      - extra_vars:
+          hook_type: pre
+        name: Cluster Upgrade - tasks
+    towerAuthSecret: acm-hive
+````
+![](img/AutomationTemplate01.png)
+![](img/AutomationTemplate02.png)
+![](img/AutomationTemplate03.png)
+![](img/AutomationTemplate04.png)
 
 
 # References
