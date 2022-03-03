@@ -76,7 +76,19 @@ This secret is needed in all namespaces that going to be execute a remote Ansibl
 # Simple AnsibleJob
 
 ````bash
-
+---
+apiVersion: tower.ansible.com/v1alpha1
+kind: AnsibleJob
+metadata:
+  generateName: ansible-notification-
+  namespace: individual-ansible-job
+spec:
+  tower_auth_secret: tower
+  job_template_name: Remote Notificator
+  extra_vars:
+    triggered_by: Aura
+    notification: email
+    to: danifernandezs@redhat.com
 ````
 
 # Governace policy automation
