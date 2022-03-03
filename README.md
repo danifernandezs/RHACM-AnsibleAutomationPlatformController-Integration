@@ -94,6 +94,23 @@ spec:
 # Governace policy automation
 
 ````bash
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicyAutomation
+metadata:
+  annotations:
+    policy.open-cluster-management.io/rerun: 'false'
+  name: namespace-must-exist-policy-automation
+  namespace: open-cluster-management
+spec:
+  automationDef:
+    extra_vars:
+      grade: 0
+      policy: namespace-must-exist
+    name: ACM Policy Automation
+    secret: acm-governance
+    type: AnsibleJob
+  mode: once
+  policyRef: namespace-must-exist
 
 ````
 
