@@ -73,6 +73,19 @@ All the integration needs use an OpenShift secret, this secret contains the Ansi
 
 This secret is needed in all namespaces that going to be execute a remote Ansible Job Template.
 
+# Simple AnsibleJob
+
+````bash
+
+````
+
+# Governace policy automation
+
+````bash
+
+````
+
+
 # References
 
 - https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/governance/governance#configuring-governance-ansible

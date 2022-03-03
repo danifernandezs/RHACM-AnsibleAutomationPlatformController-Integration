@@ -1,1 +1,0 @@
- # Welcome to Ansible gitOps Integration
